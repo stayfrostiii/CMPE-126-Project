@@ -16,7 +16,7 @@ class Piece
 			The move function will be defined in each of the child classes, and each definition will differ 
 			according to the corresponding piece. The string variables passed through will be the current position
 		*/
-		virtual bool move() = 0;
+		bool move();
 };
 
 #endif

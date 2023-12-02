@@ -7,19 +7,20 @@
 #include <stack>
 
 #include "player.h"
-#include "board.h"
+#include "chessPieces.h"
 
 class Game
 {
 	private:
-		Player& black;
-		Player& white;
-		Board& board;
-
+		Piece* board[8][8];
 		queue<Player> players;
-		stack<Board> prevTurns;
+		stack<Piece*[8][8]> prevTurns;
 
 	public:
+		Game(Player&, Player&);
+		void create();
+		void print();
+		//void takeTurn();
 };
 
 #endif

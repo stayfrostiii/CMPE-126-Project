@@ -16,7 +16,7 @@ class Pawn : public Piece
 {
 	public:
 		Pawn(bool);
-		bool move(string, string, bool isKilling);
+		bool move(string, string, bool);
 };
 
 class Rook : public Piece

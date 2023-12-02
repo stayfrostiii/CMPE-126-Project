@@ -6,6 +6,23 @@
 
 using namespace std;
 
+Piece::Piece()
+{
+	this->isWhite = -1;
+	this->pieceType = "--";
+}
+
+ostream& operator<<(ostream& os, Piece& piece)
+{
+	if (piece.isWhite == 1)
+		os << "W" << piece.pieceType;
+	else if (piece.isWhite == 0)
+		os << "B" << piece.pieceType;
+	else
+		os << piece.pieceType;
+	return os;
+}
+
 /*
 	convert(...) will convert each position on the board into an int that can be used to determine whether
 	a move is legal or not. The first integer of the int (in the 10 place) represents the x coordinate while
@@ -22,7 +39,7 @@ int convert(string pos)
 Pawn::Pawn(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "Pawn";
+	pieceType = "P";
 }
 
 /*
@@ -42,7 +59,7 @@ bool Pawn::move(string curPos, string newPos, bool isKilling)
 Rook::Rook(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "Rook";
+	pieceType = "R";
 }
 
 bool Rook::move(string curPos, string newPos)
@@ -55,7 +72,7 @@ bool Rook::move(string curPos, string newPos)
 Knight::Knight(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "Knight";
+	pieceType = "H";
 }
 
 bool Knight::move(string curPos, string newPos)
@@ -68,7 +85,7 @@ bool Knight::move(string curPos, string newPos)
 Bishop::Bishop(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "Bishop";
+	pieceType = "B";
 }
 
 bool Bishop::move(string curPos, string newPos)
@@ -81,7 +98,7 @@ bool Bishop::move(string curPos, string newPos)
 Queen::Queen(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "Queen";
+	pieceType = "Q";
 }
 
 bool Queen::move(string curPos, string newPos)
@@ -94,7 +111,7 @@ bool Queen::move(string curPos, string newPos)
 King::King(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "King";
+	pieceType = "K";
 }
 
 bool King::move(string curPos, string newPos)

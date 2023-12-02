@@ -34,14 +34,6 @@ Pawn::Pawn(bool isWhite)
 
 bool Pawn::move(string curPos, string newPos, bool isKilling)
 {
-	int curInt = convert(curPos);
-	int newInt = convert(newPos);
-
-	if (isKilling)
-	{
-
-	}
-
 	return false;
 }
 

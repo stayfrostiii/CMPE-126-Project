@@ -13,6 +13,7 @@ class Piece
 		string pieceType;
 	public:
 		Piece();
+		string getType();
 		friend ostream& operator<<(ostream&, Piece&);
 };
 

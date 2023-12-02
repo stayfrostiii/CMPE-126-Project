@@ -16,14 +16,14 @@ class Pawn : public Piece
 {
 	public:
 		Pawn(bool);
-		bool move(string, string, bool);
+		bool move(string, string, bool, Piece* [8][8]);
 };
 
 class Rook : public Piece
 {
 	public:
 		Rook(bool);
-		bool move(string, string);
+		bool move(string, string, bool, Piece*[8][8]);
 };
 
 class Knight : public Piece

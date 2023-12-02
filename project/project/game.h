@@ -12,15 +12,24 @@
 class Game
 {
 	private:
+		bool gameOver;
+
+		// Board to play on
 		Piece* board[8][8];
+
+		// players will determine which player is next
 		queue<Player> players;
+
+		// prevTurns will keep track of previous turns
 		stack<Piece*[8][8]> prevTurns;
 
 	public:
 		Game(Player&, Player&);
 		void create();
+		bool makeMove();
+		void redo();
+		void takeTurn();
 		void print();
-		//void takeTurn();
 };
 
 #endif

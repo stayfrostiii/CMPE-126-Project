@@ -6,10 +6,15 @@
 
 using namespace std;
 
+/*
+	Game(...) adds the 2 players in the parameters to the queue and initializes the board to the default
+*/
+
 Game::Game(Player& p1, Player& p2)
 {
 	players.push(p1);
 	players.push(p2);
+	gameOver = false;
 	create();
 }
 
@@ -69,6 +74,47 @@ void Game::create()
 		}
 	}
 }
+
+/*
+	makeMove() moves pieces across the board and will determine whether game is over or not.
+	The order of operations:
+	1) Ask user for move. I.e. A4 to A8
+	2) Check to see if move is valid (using move function of piece on A4)
+		- If A8 reports a piece back, then isKilling is true
+		- Else, isKilling is false
+	3) Move is made, returns if both king is alive on both sides
+
+*/
+
+bool Game::makeMove()
+{
+	return true;
+}
+
+
+
+void Game::redo()
+{
+
+}
+
+/*
+	takeTurn() is the main function of the game class.
+	1) Asks user what to do
+		- Redo turn
+		- Make Move
+	2) Calls function accordingly
+		- If makeMove() returns false, increments first player in queue, decrements second player in queue, ends game
+*/
+
+void Game::takeTurn()
+{
+
+}
+
+/*
+	print() is the current method for printing the board. Using must use the asterik because it is a 2d array of pointers
+*/
 
 void Game::print()
 {

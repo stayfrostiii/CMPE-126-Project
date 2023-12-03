@@ -9,8 +9,16 @@
 
 #include "piece.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
+
+class Null : public Piece
+{
+	public:
+		Null();
+		bool move(string, string, bool, Piece* [8][8]);
+};
 
 class Pawn : public Piece
 {
@@ -30,28 +38,28 @@ class Knight : public Piece
 {
 	public:
 		Knight(bool);
-		bool move(string, string);
+		bool move(string, string, bool, Piece* [8][8]);
 };
 
 class Bishop : public Piece
 {
 	public:
 		Bishop(bool);
-		bool move(string, string);
+		bool move(string, string, bool, Piece* [8][8]);
 };
 
 class Queen : public Piece
 {
 	public:
 		Queen(bool);
-		bool move(string, string);
+		bool move(string, string, bool, Piece* [8][8]);
 };
 
 class King : public Piece
 {
 	public:
 		King(bool);
-		bool move(string, string);
+		bool move(string, string, bool, Piece* [8][8]);
 };
 
 #endif

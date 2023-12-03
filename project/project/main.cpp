@@ -2,6 +2,7 @@
 #include <iostream>
 #include "player.h"
 #include "game.h"
+#include "chessPieces.h"
 
 using namespace std;
 
@@ -12,6 +13,8 @@ int main()
 	
 	Game game(p1, p2);
 
+	game.print();
+	cout << game.makeMove() << endl;
 	game.print();
 
 	return 0;

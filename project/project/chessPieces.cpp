@@ -6,11 +6,16 @@
 
 using namespace std;
 
-Piece::Piece()
+Null::Null()
 {
-	this->isWhite = -1;
+	this->isWhite = true;
 	this->pieceType = "--";
 }
+
+//bool Piece::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
+//{
+//	return false;
+//}
 
 string Piece::getType()
 {
@@ -24,12 +29,7 @@ string Piece::getType()
 
 ostream& operator<<(ostream& os, Piece& piece)
 {
-	if (piece.isWhite == 1)
-		os << "W" << piece.pieceType;
-	else if (piece.isWhite == 0)
-		os << "B" << piece.pieceType;
-	else
-		os << piece.pieceType;
+	os << piece.pieceType;
 	return os;
 }
 
@@ -41,15 +41,24 @@ ostream& operator<<(ostream& os, Piece& piece)
 
 int convert(string pos)
 {
-	return (pos.at(0) - 64) * 10 + pos.at(1) - '0' - 11;
+	return (pos.at(1) - '0') * 10 + (pos.at(0) - 64) - 11;
 }
+
+bool Null::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
+{
+	return false;
+}
+
 
 // Pawn class
 
 Pawn::Pawn(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "P";
+	if (isWhite)
+		pieceType = "WP";
+	else
+		pieceType = "BP";
 }
 
 /*
@@ -59,24 +68,29 @@ Pawn::Pawn(bool isWhite)
 	- When killing, it can only move diagonally
 */
 
+// PAWN IS NOT DONE YET (ALMOST THERE) (Josh)
+
 bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
 	int c = convert(curPos);
 	int n = convert(newPos);
 
-	if (isWhite == 1)
+	if (c % 10 != n % 10 || c / 10 == n / 10)
+		return false;
+
+	if (isWhite)
 	{
 		// If pawn is going to kill
 		if (isKilling)
 		{
 			// Using chart, checks to see if next pos is diagonal one space forward
-			return n - c == 9 || n - c == -11;
+			return n - c == -9 || n - c == -11;
 		}
-		else if (c / 10 == 6 && c / 10 - n / 10 == 2)
+		else if (c / 10 == 6 && n / 10 == 4)
 		{
-			return board[c / 10 - 1][c % 10]->getType() == "--" && board[c / 10 - 2][c % 10]->getType() == "--";
+			return board[5][c % 10]->getType() == "--" && board[4][c % 10]->getType() == "--";
 		}
-		else if (c / 10 != 0)
+		else if (c / 10 != 0 && c / 10 > n / 10)
 		{
 			return board[c / 10 - 1][c % 10]->getType() == "--";
 		}
@@ -87,17 +101,13 @@ bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 		if (isKilling)
 		{
 			// Using chart, checks to see if next pos is diagonal one space forward
-			return n - c == -9 || n - c == 11;
+			return n - c == 9 || n - c == 11;
 		}
-		else if (c % 10 == 1 && n % 10 - c % 10 == 1)
+		else if (c / 10 == 1 && n / 10 == 3)
 		{
-			return board[c / 10 + 1][1]->getType() == "--";
+			return board[2][c % 10]->getType() == "--" && board[3][c % 10]->getType() == "--";
 		}
-		else if (c % 10 == 7 && n % 10 - c % 10 == 2)
-		{
-			return board[c / 10 + 1][1]->getType() == "--" && board[c / 10 + 1][2]->getType() == "--";
-		}
-		else if (c / 10 != 0)
+		else if (c / 10 != 7)
 		{
 			return board[c / 10 + 1][c % 10]->getType() == "--";
 		}
@@ -111,15 +121,90 @@ bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 Rook::Rook(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "R";
+	if (isWhite)
+		pieceType = "WR";
+	else
+		pieceType = "BR";
 }
 
 /*
 	A rook can only move in horizontal or vertical directions
 */
 
+// ROOK IS NOT DONE STILL WORKING (Josh)
+
 bool Rook::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
+	int c = convert(curPos);
+	int n = convert(newPos);
+
+	// Make sure out of bounds is set
+
+	if ( ( c / 10 != n / 10 && (c % 10) != (n & 10) ) || (c / 10 == n / 10 && (c % 10) == (n & 10)))
+	{
+		return false;
+	}
+
+	int diff;
+	int noKill = 0;
+
+	if (c / 10 == n / 10)
+	{
+		int diff = c % 10 - n % 10;
+		if (diff < 0)
+		{
+			if (!isKilling)
+			{
+				++noKill;
+			}
+			for (int i = c % 10 + 1; i < n % 10 + noKill; i++)
+			{
+				if (board[c / 10][i]->getType() != "--")
+					return false;
+			}
+		}
+		else if (diff > 0)
+		{
+			if (!isKilling)
+			{
+				++diff;
+			}
+			for (int i = c % 10 - 1; i > n % 10; i--)
+			{
+				if (board[c / 10][i]->getType() != "--")
+					return false;
+			}
+		}
+	}
+	else if ((c & 10) == (n % 10))
+	{
+		int diff = c / 10 - n / 10;
+		if (diff < 0)
+		{
+			if (!isKilling)
+			{
+				++diff;
+			}
+			for (int i = c / 10 + 1; i < n / 10; i++)
+			{
+				if (board[i][c % 10]->getType() != "--")
+					return false;
+			}
+		}
+		else if (diff > 0)
+		{
+			if (!isKilling)
+			{
+				++diff;
+			}
+			for (int i = c / 10 - 1; i > n / 10; i--)
+			{
+				if (board[i][c % 10]->getType() != "--")
+					return false;
+			}
+		}
+	}
+
 	return false;
 }
 
@@ -128,7 +213,10 @@ bool Rook::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 Knight::Knight(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "H";
+	if (isWhite)
+		pieceType = "WH";
+	else
+		pieceType = "BH";
 }
 
 /*
@@ -137,8 +225,42 @@ Knight::Knight(bool isWhite)
 	2) move perpendicular one space from direction you chose
 */
 
-bool Knight::move(string curPos, string newPos)
+// KNIGHT IS FINISHED
+
+bool Knight::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
+	int c = convert(curPos);
+	int n = convert(newPos);
+
+	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
+		return false;
+
+	if (isWhite)
+	{
+		if (board[n / 10][n % 10]->getType().at(0) == 'W')
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (board[n / 10][n % 10]->getType().at(0) == 'B')
+		{
+			return false;
+		}
+	}
+
+	if (c / 10 == n / 10 + 1 || c / 10 == n / 10 - 1)
+	{
+		if ((c % 10) == (n % 10) + 2 || (c % 10) == (n % 10) - 2)
+			return true;
+	}
+	else
+	{
+		if ((c / 10) == (n / 10) + 2 || (c / 10) == (n / 10) - 2)
+			return true;
+	}
+
 	return false;
 }
 
@@ -147,14 +269,17 @@ bool Knight::move(string curPos, string newPos)
 Bishop::Bishop(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "B";
+	if (isWhite)
+		pieceType = "WB";
+	else
+		pieceType = "BB";
 }
 
 /*
 	A bishop can move in diagonal directions
 */
 
-bool Bishop::move(string curPos, string newPos)
+bool Bishop::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
 	return false;
 }
@@ -164,14 +289,17 @@ bool Bishop::move(string curPos, string newPos)
 Queen::Queen(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "Q";
+	if (isWhite)
+		pieceType = "WQ";
+	else
+		pieceType = "BQ";
 }
 
 /*
 	A queen can move in diagonal, horizontal, and vertical
 */
 
-bool Queen::move(string curPos, string newPos)
+bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
 	return false;
 }
@@ -181,14 +309,17 @@ bool Queen::move(string curPos, string newPos)
 King::King(bool isWhite)
 {
 	this->isWhite = isWhite;
-	pieceType = "K";
+	if (isWhite)
+		pieceType = "WK";
+	else
+		pieceType = "BK";
 }
 
 /*
 	A king can move in any direction one space
 */
 
-bool King::move(string curPos, string newPos)
+bool King::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
 	return false;
 }

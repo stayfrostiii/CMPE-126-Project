@@ -1,14 +1,21 @@
 
 #include <iostream>
-#include <queue>;
+#include <queue>
+#include <string>
 
 #include "game.h"
+#include "chessPieces.h"
 
 using namespace std;
 
 /*
 	Game(...) adds the 2 players in the parameters to the queue and initializes the board to the default
 */
+
+int convertPos(string pos)
+{
+	return (pos.at(1) - '0') * 10 + (pos.at(0) - 64) - 11;
+}
 
 Game::Game(Player& p1, Player& p2)
 {
@@ -40,6 +47,7 @@ void Game::create()
 			case 1:
 				for (int x = 0; x < 8; x++)
 				{
+					Pawn p(false);
 					board[i][x] = new Pawn(false);
 				}
 				break;
@@ -68,7 +76,7 @@ void Game::create()
 			default:
 				for (int x = 0; x < 8; x++)
 				{
-					board[i][x] = new Piece();
+					board[i][x] = new Null();
 				}
 				break;
 		}
@@ -86,10 +94,47 @@ void Game::create()
 
 */
 
+// PAWN TEST CASE
+
+/*
+
 bool Game::makeMove()
 {
-	return true;
-}
+	cout << *board[6][3] << endl;
+	bool canMakeMove = board[6][3]->move("D7", "D5", false, board);
+	if (canMakeMove)
+	{
+		int newPos = convertPos("D5");
+		int oldPos = convertPos("D7");
+
+		Piece* temp = board[oldPos / 10][oldPos % 10];
+
+		board[6][3] = new Null();
+		board[newPos / 10][newPos % 10] = temp;
+
+	}
+	return canMakeMove;
+} */
+
+// KNIGHT TEST CASE
+
+bool Game::makeMove()
+{
+	cout << *board[7][1] << endl;
+	bool canMakeMove = board[7][1]->move("B8", "C6", false, board);
+	if (canMakeMove)
+	{
+		int newPos = convertPos("C6");
+		int oldPos = convertPos("B8");
+
+		Piece* temp = board[oldPos / 10][oldPos % 10];
+
+		board[7][1] = new Null();
+		board[newPos / 10][newPos % 10] = temp;
+
+	}
+	return canMakeMove;
+} 
 
 
 

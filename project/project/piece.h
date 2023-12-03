@@ -9,10 +9,10 @@ using namespace std;
 class Piece
 {
 	protected:
-		int isWhite;
+		bool isWhite;
 		string pieceType;
 	public:
-		Piece();
+		virtual bool move(string, string, bool, Piece*[8][8]) = 0;
 		string getType();
 		friend ostream& operator<<(ostream&, Piece&);
 };

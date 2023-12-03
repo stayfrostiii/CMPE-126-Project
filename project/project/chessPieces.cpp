@@ -301,6 +301,124 @@ Queen::Queen(bool isWhite)
 
 bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
+	int c = convert(curPos);
+	int n = convert(newPos);
+	
+	if(isWhite)
+	{
+		if (board[n / 10][n % 10]->getType().at(0) == 'W')
+		{
+			return false;
+		}
+	}
+	else
+	{
+		if (board[n / 10][n % 10]->getType().at(0) == 'B')
+		{
+			return false;
+		}
+	}
+	if(n /10 >= 8 || n % 10 >= 8 || n / 10 <= 0 || n % 10 <= 0)
+	{
+		return false;
+	}
+	if(((c - n) % 9 == 0) || ((c - n) % 11 == 0))
+	{
+		if(n > c && ((c - n) % 9 == 0)) //if we are going diagonal down to the left
+		{
+			for (int i = c; i < n; i++)
+			{
+				if (board[i / 10][i % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c / 10 + 1) * 10 + (c % 10 - 1); //moves diagonally on the chess board
+			}
+			return true;
+		}
+		else if(n < c && ((c - n) % 9 == 0)) //if we are going diagonal up to the right
+		{
+			for (int i = c; i > n; i--)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c / 10 - 1) * 10 + (c % 10 + 1); //moves diagonally on the chess board
+			}
+			return true;
+		}
+		else if(n < c && ((c - n) % 11 == 0)) //if we are going diagonal down to the right
+		{
+			for (int i = c; i < n; i++)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c / 10 + 1) * 10 + (c % 10 + 1); //moves diagonally on the chess board
+			}
+			return true;
+		}
+		else if(n < c && ((c - n) % 11 == 0)) //if we are going diagonal up to the left
+		{
+			for (int i = c; i > n; i--)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c / 10 - 1) * 10 + (c % 10 - 1); //moves diagonally on the chess board
+			}
+			return true;
+		}
+	}
+	else if(c / 10 == n / 10) //if the queen is moving in the vertical direction
+	{
+		if(n < c) //going vertically up
+		{
+			for (int i = c; i < n; i++)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c - 10); //moves vertically on the chess board
+			}
+			return true;
+		}
+		else if(n > c) //going vertically down
+		{
+			for (int i = c; i > n; i--)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c + 10); //moves vertically on the chess board
+			}
+			return true;
+		}
+	}	
+	else if(c % 10 == n % 10) //if the queen is moving horizontally
+	{
+		if(n < c) //horizontally left
+		{
+			for (int i = c; i < n; i++)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c - 1); //moves horizontally
+			}
+			return true;
+		}
+		else if(n > c) //horizontally right
+		{
+			for (int i = c; i > n; i--)
+			{
+				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+					return false;
+				
+				c = (c + 1); //moves horizontally
+			}
+			return true;
+		}
+	}
 	return false;
 }
 

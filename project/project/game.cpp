@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <queue>;
+#include <queue>
 
 #include "game.h"
 
@@ -138,7 +138,7 @@ void Game::takeTurn(Player& p)
 	string curPos;
 	string newPos;
 	bool done = false;
-	prevTurns.push(board);
+	//prevTurns.push(board);
 
 	do
 	{
@@ -161,7 +161,12 @@ void Game::takeTurn(Player& p)
 
 void Game::run()
 {
-	
+	for (int i = 0; i < 7; i++)
+	{
+		takeTurn(players.front());
+		players.push(players.front());
+		players.pop();
+	}
 }
 
 /*

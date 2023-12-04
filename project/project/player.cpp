@@ -37,6 +37,11 @@ bool Player::getTeam()
 	return isWhite;
 }
 
+string Player::getName()
+{
+	return name;
+}
+
 Player& Player::operator++()
 {
 	++wins;

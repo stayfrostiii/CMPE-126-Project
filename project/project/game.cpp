@@ -104,12 +104,23 @@ bool::Game::makeMove(string curPos, string newPos, Player& p)
 	cout << board[c / 10][c % 10]->getType() << " moving from " << curPos << " -> " << newPos << endl;
 
 	bool canMakeMove = board[c / 10][c % 10]->move(curPos, newPos, false, board);
+	bool gameOver;
+
 	if (canMakeMove)
 	{
+		gameOver = board[n / 10][n % 10]->getType().at(1) == 'K';
+		
 		Piece* temp = board[c / 10][c % 10];
 
 		board[c / 10][c % 10] = new Null();
 		board[n / 10][n % 10] = temp;
+
+		if (gameOver)
+		{
+			endGW(p);
+			exit(0);
+		}
+
 	}
 	return canMakeMove;
 }
@@ -142,9 +153,9 @@ void Game::takeTurn(Player& p)
 
 	do
 	{
-		cout << "Enter current position of piece: ";
+		cout << "Current Position: ";
 		cin >> curPos;
-		cout << "Enter next position of piece: ";
+		cout << "New Position: ";
 		cin >> newPos;
 
 		done = makeMove(curPos, newPos, p);
@@ -161,12 +172,26 @@ void Game::takeTurn(Player& p)
 
 void Game::run()
 {
-	for (int i = 0; i < 7; i++)
+	bool isWhite = true;
+	while (true)
 	{
+		cout << players.front().getName() << "'s turn";
+		if (isWhite)
+			cout << " (W)..." << endl;
+		else
+			cout << " (B)..." << endl;
 		takeTurn(players.front());
 		players.push(players.front());
 		players.pop();
+		isWhite = !isWhite;
 	}
+}
+
+void Game::endGW(Player& p)
+{
+	++p;
+	print();
+	cout << p.getName() << " has won the game";
 }
 
 /*
@@ -175,10 +200,11 @@ void Game::run()
 
 void Game::print()
 {
+	cout << "  A  B  C  D  E  F  G  H" << endl;
 	for (int i = 0; i < 8; i++)
 	{
-		cout << "| " << *board[i][0] << " " << *board[i][1] << " " << *board[i][2] << " " << *board[i][3] << " " <<
-			*board[i][4] << " " << *board[i][5] << " " << *board[i][6] << " " << *board[i][7] << " |" << endl;
+		cout << "|" << *board[i][0] << " " << *board[i][1] << " " << *board[i][2] << " " << *board[i][3] << " " <<
+			*board[i][4] << " " << *board[i][5] << " " << *board[i][6] << " " << *board[i][7] << "|  " << i + 1 << endl;
 	}
 }
 

@@ -30,6 +30,7 @@ public:
 	void redo();
 	void takeTurn(Player&);
 	void run();
+	void endGW(Player&);
 	void print();
 };
 

@@ -23,7 +23,7 @@ string Piece::getType()
 }
 
 /*
-	operator<<(...) allows for direct printing of a piece. W or B is attached depending on value of isWHite. 
+	operator<<(...) allows for direct printing of a piece. W or B is attached depending on value of isWHite.
 	If a null piece, no W or B is attached.
 */
 
@@ -269,7 +269,7 @@ bool Bishop::move(string curPos, string newPos, bool isKilling, Piece* board[8][
 {
 	int c = convert(curPos);
 	int n = convert(newPos);
-	
+
 	// Check to see if new spot is obs
 
 	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
@@ -282,7 +282,7 @@ bool Bishop::move(string curPos, string newPos, bool isKilling, Piece* board[8][
 	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
 		return false;
 
-	if ( (c - n) % 9 == 0)
+	if ((c - n) % 9 == 0)
 	{
 		if (n > c) //if we are going diagonal down to the left
 		{
@@ -349,7 +349,7 @@ bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8
 {
 	int c = convert(curPos);
 	int n = convert(newPos);
-	
+
 	// Check to see if new spot is obs
 
 	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
@@ -362,7 +362,7 @@ bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8
 	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
 		return false;
 
-	if ( (c - n) % 9 == 0)
+	if ((c - n) % 9 == 0)
 	{
 		if (n > c) //if we are going diagonal down to the left
 		{
@@ -384,7 +384,7 @@ bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8
 		}
 	}
 
-	else if ( (c - n) % 11 == 0)
+	else if ((c - n) % 11 == 0)
 	{
 		if (n > c) //if we are going diagonal down to the right
 		{

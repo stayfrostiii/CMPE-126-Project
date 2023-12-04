@@ -1,21 +1,19 @@
 
 #include <iostream>
-#include <queue>
-#include <string>
+#include <queue>;
 
 #include "game.h"
-#include "chessPieces.h"
 
 using namespace std;
-
-/*
-	Game(...) adds the 2 players in the parameters to the queue and initializes the board to the default
-*/
 
 int convertPos(string pos)
 {
 	return (pos.at(1) - '0') * 10 + (pos.at(0) - 64) - 11;
 }
+
+/*
+	Game(...) adds the 2 players in the parameters to the queue and initializes the board to the default
+*/
 
 Game::Game(Player& p1, Player& p2)
 {
@@ -32,61 +30,54 @@ void Game::create()
 		switch (i)
 		{
 			// Creating Black Special Pieces at top of board
-			case 0: 
-				board[0][0] = new Rook(false);
-				board[0][1] = new Knight(false);
-				board[0][2] = new Bishop(false);
-				board[0][3] = new Queen(false);
-				board[0][4] = new King(false);
-				board[0][5] = new Bishop(false);
-				board[0][6] = new Knight(false);
-				board[0][7] = new Rook(false);
-				break;
+		case 0:
+			board[0][0] = new Rook(false);
+			board[0][1] = new Knight(false);
+			board[0][2] = new Bishop(false);
+			board[0][3] = new Queen(false);
+			board[0][4] = new King(false);
+			board[0][5] = new Bishop(false);
+			board[0][6] = new Knight(false);
+			board[0][7] = new Rook(false);
+			break;
 
 			// Creating Black Pawns at 2nd to top of board
-				/*
-			case 1:
-				for (int x = 0; x < 8; x++)
-				{
-					Pawn p(false);
-					board[i][x] = new Pawn(false);
-				}
-				break;
-				*/
+		case 1:
+			for (int x = 0; x < 8; x++)
+			{
+				board[i][x] = new Pawn(false);
+			}
+			break;
 
 			// Creating White Pawns at 2nd to bottom of board
-				/*
-			case 6:
-				for (int x = 0; x < 8; x++)
-				{
-					board[i][x] = new Pawn(true);
-				}
-				break; 
-
-				*/
+		case 6:
+			for (int x = 0; x < 8; x++)
+			{
+				board[i][x] = new Pawn(true);
+			}
+			break;
 
 			// Creating White Special Pieces at bottom of board
-			case 7:
-				board[7][0] = new Rook(true);
-				board[7][1] = new Knight(true);
-				board[7][2] = new Bishop(true);
-				board[7][3] = new Queen(true);
-				board[7][4] = new King(true);
-				board[7][5] = new Bishop(true);
-				board[7][6] = new Knight(true);
-				board[7][7] = new Rook(true);
-				break;
+		case 7:
+			board[7][0] = new Rook(true);
+			board[7][1] = new Knight(true);
+			board[7][2] = new Bishop(true);
+			board[7][3] = new Queen(true);
+			board[7][4] = new King(true);
+			board[7][5] = new Bishop(true);
+			board[7][6] = new Knight(true);
+			board[7][7] = new Rook(true);
+			break;
 
 			// Creates empty space
-			default:
-				for (int x = 0; x < 8; x++)
-				{
-					board[i][x] = new Null();
-				}
-				break;
+		default:
+			for (int x = 0; x < 8; x++)
+			{
+				board[i][x] = new Null();
+			}
+			break;
 		}
 	}
-	//board[6][3] = new Null();
 }
 
 /*
@@ -99,6 +90,93 @@ void Game::create()
 	3) Move is made, returns if both king is alive on both sides
 
 */
+
+bool::Game::makeMove(string curPos, string newPos, Player& p)
+{
+	int c = convertPos(curPos);
+	int n = convertPos(newPos);
+
+	if (p.getTeam() && board[c / 10][c % 10]->getType().at(0) == 'B')
+		return false;
+	else if (!p.getTeam() && board[c / 10][c % 10]->getType().at(0) == 'W')
+		return false;
+
+	cout << board[c / 10][c % 10]->getType() << " moving from " << curPos << " -> " << newPos << endl;
+
+	bool canMakeMove = board[c / 10][c % 10]->move(curPos, newPos, false, board);
+	if (canMakeMove)
+	{
+		Piece* temp = board[c / 10][c % 10];
+
+		board[c / 10][c % 10] = new Null();
+		board[n / 10][n % 10] = temp;
+	}
+	return canMakeMove;
+}
+
+void Game::redo()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int x = 0; x < 8; x++)
+		{
+			board[i][x] = prevTurns.top()[i][x];
+		}
+	}
+	prevTurns.pop();
+}
+
+/*
+	takeTurn() is the main function of the game class.
+	1) Asks user what to do
+		- Redo turn
+		- Make Move
+*/
+
+void Game::takeTurn(Player& p)
+{
+	string curPos;
+	string newPos;
+	bool done = false;
+	prevTurns.push(board);
+
+	do
+	{
+		cout << "Enter current position of piece: ";
+		cin >> curPos;
+		cout << "Enter next position of piece: ";
+		cin >> newPos;
+
+		done = makeMove(curPos, newPos, p);
+		if (!done)
+		{
+			cout << "invalid move" << endl;
+		}
+
+	} while (!done);
+
+
+	print();
+}
+
+void Game::run()
+{
+	
+}
+
+/*
+	print() is the current method for printing the board. Using must use the asterik because it is a 2d array of pointers
+*/
+
+void Game::print()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		cout << "| " << *board[i][0] << " " << *board[i][1] << " " << *board[i][2] << " " << *board[i][3] << " " <<
+			*board[i][4] << " " << *board[i][5] << " " << *board[i][6] << " " << *board[i][7] << " |" << endl;
+	}
+}
+
 
 // PAWN TEST CASE
 
@@ -120,7 +198,7 @@ bool Game::makeMove()
 
 	}
 	return canMakeMove;
-} 
+}
 
 */
 
@@ -144,11 +222,8 @@ bool Game::makeMove()
 
 	}
 	return canMakeMove;
-} 
+}
 
-*/
-
-// ROOK TEST CASE
 
 /*
 
@@ -174,6 +249,8 @@ bool Game::makeMove()
 
 // QUEEN TEST CASE
 
+/*
+
 bool Game::makeMove()
 {
 	cout << *board[7][3] << endl;
@@ -191,6 +268,8 @@ bool Game::makeMove()
 	}
 	return canMakeMove;
 }
+
+*/
 
 // BISHOP TEST CASE
 
@@ -215,35 +294,3 @@ bool Game::makeMove()
 }
 
 */
-
-void Game::redo()
-{
-
-}
-
-/*
-	takeTurn() is the main function of the game class.
-	1) Asks user what to do
-		- Redo turn
-		- Make Move
-	2) Calls function accordingly
-		- If makeMove() returns false, increments first player in queue, decrements second player in queue, ends game
-*/
-
-void Game::takeTurn()
-{
-
-}
-
-/*
-	print() is the current method for printing the board. Using must use the asterik because it is a 2d array of pointers
-*/
-
-void Game::print()
-{
-	for (int i = 0; i < 8; i++)
-	{
-		cout << "| " << *board[i][0] << " " << *board[i][1] << " " << *board[i][2] << " " << *board[i][3] << " " <<
-			*board[i][4] << " " << *board[i][5] << " " << *board[i][6] << " " << *board[i][7] << " |" << endl;
-	}
-}

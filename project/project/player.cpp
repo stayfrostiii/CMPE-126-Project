@@ -27,6 +27,16 @@ string Player::getInfo()
 	return name + " " + to_string(wins) + " " + to_string(losses) + " " + to_string(wlr);
 }
 
+void Player::setTeam(bool isWhite)
+{
+	this->isWhite = isWhite;
+}
+
+bool Player::getTeam()
+{
+	return isWhite;
+}
+
 Player& Player::operator++()
 {
 	++wins;

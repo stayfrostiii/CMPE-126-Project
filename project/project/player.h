@@ -8,17 +8,20 @@ using namespace std;
 
 class Player
 {
-	private:
-		string name;
-		int wins;
-		int losses;
-		double wlr;
-	public:
-		Player(string);
-		Player(string, int, int, double);
-		string getInfo();
-		Player& operator++();
-		Player& operator--();
+private:
+	string name;
+	int wins;
+	int losses;
+	double wlr;
+	bool isWhite;
+public:
+	Player(string);
+	Player(string, int, int, double);
+	string getInfo();
+	void setTeam(bool);
+	bool getTeam();
+	Player& operator++();
+	Player& operator--();
 };
 
 #endif

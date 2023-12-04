@@ -469,5 +469,51 @@ King::King(bool isWhite)
 
 bool King::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
+	int c = convert(curPos);
+	int n = convert(newPos);
+
+	// Check to see if new spot is obs
+
+	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
+		return false;
+
+	// Check to make sure new spot is not teammate
+
+	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
+		return false;
+	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
+		return false;
+
+	if (((c-n) == 9) || ((c-n) == -9)) //going diagonal in one direction one space
+	{
+		if (board[n / 10][n % 10]->getType() != "--")
+			return false;
+		else
+			return true;
+	}
+
+	else if (((c-n) == 11) || ((c-n) == -11)) //going diagonal in the other directoin
+	{
+		if (board[n / 10][n % 10]->getType() != "--")
+			return false;
+		else
+			return true;
+	}
+
+	else if ((c / 10 == n / 10) && ((c - n == 10) || (c - n == -10))) //moving vertically
+	{
+		if (board[n / 10][n % 10]->getType() != "--")
+			return false;
+		else
+			return true;
+	}
+
+	else if ((c % 10 == n % 10) && ((c - n == 1) || (c - n == -1))) // moving horizontally
+	{
+		if (board[n / 10][n % 10]->getType() != "--")
+			return false;
+		else
+			return true;
+	}
 	return false;
 }

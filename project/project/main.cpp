@@ -1,10 +1,12 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <map>
 
 #include "player.h"
 #include "game.h"
+#include "map.h"
 
 using namespace std;
 
@@ -78,6 +80,24 @@ void startGame()
 	game.run();
 }
 
+void printAllPlayers()
+{
+	cout << "Printing all players from least to most recently played: " << endl << endl;
+	
+	string line;
+	ifstream ifile("names.txt");
+
+	if (ifile.is_open())
+	{
+		while (getline(ifile, line))
+		{
+			Player player(line);
+			cout << player << endl;
+		}
+		ifile.close();
+	}
+}
+
 void lookUpStat()
 {
 	string name;
@@ -98,33 +118,27 @@ void lookUpStat()
 	}
 }
 
-void openLeaderboard()
+void wlrLookUp()
 {
+	double wlr;
+	cout << "Enter W/L Ratio to look up (up to 2 decimal places): ";
+	cin >> wlr;
+	cout << endl;
+
+	MapSC map;
+
 	string line;
-	map<double, string> names;
 	ifstream ifile("names.txt");
 
 	if (ifile.is_open())
 	{
 		while (getline(ifile, line))
 		{
-			Player temp(line);
-			names[temp.getWLR()] = line;
+			map.add(line);
 		}
 		ifile.close();
-	} 
-
-	map<double, string>::iterator it = names.end();
-
-	int count = 1;
-
-	while (it != names.begin())
-	{
-		--it;
-		Player temp(it->second);
-		cout << count << ") " << endl << temp;
-		++count;
 	}
+	map.print(wlr);
 }
 
 int main()
@@ -134,7 +148,8 @@ int main()
 	int choice;
 	cout << "(1) Start new chess game" << endl
 		<< "(2) Look up player stats" << endl
-		<< "(3) Open Leaderboard" << endl
+		<< "(3) Print all players" << endl
+		<< "(4) Look up players with certain W/L Ratio" << endl
 		<< "Choice: ";
 	cin >> choice;
 	cout << endl;
@@ -150,7 +165,10 @@ int main()
 			lookUpStat();
 			break;
 		case 3:
-			openLeaderboard();
+			printAllPlayers();
+			break;
+		case 4:
+			wlrLookUp();
 			break;
 	}
 

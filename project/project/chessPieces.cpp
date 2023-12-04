@@ -84,7 +84,7 @@ bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 		if (isKilling)
 		{
 			// Using chart, checks to see if next pos is diagonal one space forward
-			return n - c == -9 || n - c == -11;
+			return (n - c == -9 || n - c == -11) && board[n / 10][n % 10]->getType().at(0) == 'B';
 		}
 		else if (c / 10 == 6 && n / 10 == 4)
 		{
@@ -101,7 +101,7 @@ bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 		if (isKilling)
 		{
 			// Using chart, checks to see if next pos is diagonal one space forward
-			return n - c == 9 || n - c == 11;
+			return (n - c == 9 || n - c == 11) && board[n / 10][n % 10]->getType().at(0) == 'W';
 		}
 		else if (c / 10 == 1 && n / 10 == 3)
 		{
@@ -140,71 +140,62 @@ bool Rook::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 
 	// Make sure out of bounds is set
 
-	if ( ( c / 10 != n / 10 && (c % 10) != (n & 10) ) || (c / 10 == n / 10 && (c % 10) == (n & 10)))
-	{
+	cout << c << " " << n << endl;
+
+	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
-	}
 
 	int diff;
-	int noKill = 0;
+	
+	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
+		return false;
+	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
+		return false;
 
 	if (c / 10 == n / 10)
 	{
-		int diff = c % 10 - n % 10;
-		if (diff < 0)
+		diff = c % 10 - n % 10;
+		if (diff > 0)
 		{
-			if (!isKilling)
-			{
-				++noKill;
-			}
-			for (int i = c % 10 + 1; i < n % 10 + noKill; i++)
-			{
-				if (board[c / 10][i]->getType() != "--")
-					return false;
-			}
-		}
-		else if (diff > 0)
-		{
-			if (!isKilling)
-			{
-				++diff;
-			}
 			for (int i = c % 10 - 1; i > n % 10; i--)
 			{
 				if (board[c / 10][i]->getType() != "--")
 					return false;
 			}
+			return true;
 		}
-	}
-	else if ((c & 10) == (n % 10))
-	{
-		int diff = c / 10 - n / 10;
-		if (diff < 0)
+		else if (diff < 0)
 		{
-			if (!isKilling)
+			for (int i = c % 10 + 1; i < n % 10; i++)
 			{
-				++diff;
-			}
-			for (int i = c / 10 + 1; i < n / 10; i++)
-			{
-				if (board[i][c % 10]->getType() != "--")
+				if (board[c / 10][i]->getType() != "--")
 					return false;
 			}
+			return true;
 		}
-		else if (diff > 0)
+	}
+	else if (c % 10 == n % 10)
+	{
+		diff = c / 10 - n / 10;
+		if (diff > 0)
 		{
-			if (!isKilling)
-			{
-				++diff;
-			}
 			for (int i = c / 10 - 1; i > n / 10; i--)
 			{
 				if (board[i][c % 10]->getType() != "--")
 					return false;
 			}
+			return true;
+		}
+		else if (diff < 0)
+		{
+			for (int i = c / 10 + 1; i < n / 10; i++)
+			{
+				if (board[i][c % 10]->getType() != "--")
+					return false;
+			}
+			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -235,27 +226,17 @@ bool Knight::move(string curPos, string newPos, bool isKilling, Piece* board[8][
 	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
 
-	if (isWhite)
-	{
-		if (board[n / 10][n % 10]->getType().at(0) == 'W')
-		{
-			return false;
-		}
-	}
-	else
-	{
-		if (board[n / 10][n % 10]->getType().at(0) == 'B')
-		{
-			return false;
-		}
-	}
+	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
+		return false;
+	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
+		return false;
 
 	if (c / 10 == n / 10 + 1 || c / 10 == n / 10 - 1)
 	{
 		if ((c % 10) == (n % 10) + 2 || (c % 10) == (n % 10) - 2)
 			return true;
 	}
-	else
+	else if (c % 10 == n % 10 + 1 || c % 10 == n % 10 - 1)
 	{
 		if ((c / 10) == (n / 10) + 2 || (c / 10) == (n / 10) - 2)
 			return true;

@@ -54,7 +54,7 @@ void Game::create()
 
 			// Creating White Pawns at 2nd to bottom of board
 			case 6:
-				for (int x = 0; x < 8; x++)
+				for (int x = 1; x < 8; x++)
 				{
 					board[i][x] = new Pawn(true);
 				}
@@ -81,6 +81,7 @@ void Game::create()
 				break;
 		}
 	}
+	board[6][0] = new Null();
 }
 
 /*
@@ -114,17 +115,21 @@ bool Game::makeMove()
 
 	}
 	return canMakeMove;
-} */
+} 
+
+*/
 
 // KNIGHT TEST CASE
+
+/*
 
 bool Game::makeMove()
 {
 	cout << *board[7][1] << endl;
-	bool canMakeMove = board[7][1]->move("B8", "C6", false, board);
+	bool canMakeMove = board[7][1]->move("B8", "D7", false, board);
 	if (canMakeMove)
 	{
-		int newPos = convertPos("C6");
+		int newPos = convertPos("D7");
 		int oldPos = convertPos("B8");
 
 		Piece* temp = board[oldPos / 10][oldPos % 10];
@@ -136,7 +141,31 @@ bool Game::makeMove()
 	return canMakeMove;
 } 
 
+*/
 
+// ROOK TEST CASE
+
+/*
+
+bool Game::makeMove()
+{
+	cout << *board[7][0] << endl;
+	bool canMakeMove = board[7][0]->move("A8", "A2", false, board);
+	if (canMakeMove)
+	{
+		int newPos = convertPos("A2");
+		int oldPos = convertPos("A8");
+
+		Piece* temp = board[oldPos / 10][oldPos % 10];
+
+		board[7][0] = new Null();
+		board[newPos / 10][newPos % 10] = temp;
+
+	}
+	return canMakeMove;
+}
+
+*/
 
 void Game::redo()
 {

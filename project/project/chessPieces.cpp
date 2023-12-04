@@ -68,7 +68,7 @@ Pawn::Pawn(bool isWhite)
 	- When killing, it can only move diagonally
 */
 
-// PAWN IS NOT DONE YET (ALMOST THERE) (Josh)
+// PAWN IS FINISHED
 
 bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
@@ -131,7 +131,7 @@ Rook::Rook(bool isWhite)
 	A rook can only move in horizontal or vertical directions
 */
 
-// ROOK IS NOT DONE STILL WORKING (Josh)
+// ROOK IS FINISHED
 
 bool Rook::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
@@ -142,11 +142,13 @@ bool Rook::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 
 	cout << c << " " << n << endl;
 
+	// Check to see if new spot is obs
+
 	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
 
-	int diff;
-	
+	// Check to make sure new spot is not teammate
+
 	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
 		return false;
 	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
@@ -154,47 +156,44 @@ bool Rook::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 
 	if (c / 10 == n / 10)
 	{
-		diff = c % 10 - n % 10;
-		if (diff > 0)
+		if (c % 10 - n % 10 > 0)
 		{
 			for (int i = c % 10 - 1; i > n % 10; i--)
 			{
 				if (board[c / 10][i]->getType() != "--")
 					return false;
 			}
-			return true;
 		}
-		else if (diff < 0)
+		else if (c % 10 - n % 10 < 0)
 		{
 			for (int i = c % 10 + 1; i < n % 10; i++)
 			{
 				if (board[c / 10][i]->getType() != "--")
 					return false;
 			}
-			return true;
 		}
+		return true;
 	}
+
 	else if (c % 10 == n % 10)
 	{
-		diff = c / 10 - n / 10;
-		if (diff > 0)
+		if (c / 10 - n / 10 > 0)
 		{
 			for (int i = c / 10 - 1; i > n / 10; i--)
 			{
 				if (board[i][c % 10]->getType() != "--")
 					return false;
 			}
-			return true;
 		}
-		else if (diff < 0)
+		else if (c / 10 - n / 10 < 0)
 		{
 			for (int i = c / 10 + 1; i < n / 10; i++)
 			{
 				if (board[i][c % 10]->getType() != "--")
 					return false;
 			}
-			return true;
 		}
+		return true;
 	}
 	return false;
 }
@@ -223,8 +222,12 @@ bool Knight::move(string curPos, string newPos, bool isKilling, Piece* board[8][
 	int c = convert(curPos);
 	int n = convert(newPos);
 
+	// Check to see if new spot is obs
+
 	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
+
+	// Check to make sure new spot is not teammate
 
 	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
 		return false;
@@ -260,72 +263,64 @@ Bishop::Bishop(bool isWhite)
 	A bishop can move in diagonal directions
 */
 
+// BISHOP IS FINISHED
+
 bool Bishop::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
 	int c = convert(curPos);
 	int n = convert(newPos);
 	
-	if(isWhite)
-	{
-		if (board[n / 10][n % 10]->getType().at(0) == 'W')
-		{
-			return false;
-		}
-	}
-	else
-	{
-		if (board[n / 10][n % 10]->getType().at(0) == 'B')
-		{
-			return false;
-		}
-	}
-	if(n /10 >= 8 || n % 10 >= 8 || n / 10 <= 0 || n % 10 <= 0)
-	{
+	// Check to see if new spot is obs
+
+	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
-	}
-	if(((c - n) % 9 == 0) || ((c - n) % 11 == 0))
+
+	// Check to make sure new spot is not teammate
+
+	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
+		return false;
+	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
+		return false;
+
+	if ( (c - n) % 9 == 0)
 	{
-		if(n > c && ((c - n) % 9 == 0)) //if we are going diagonal down to the left
+		if (n > c) //if we are going diagonal down to the left
 		{
-			for (int i = c; i < n; i++)
+			for (int i = c + 9; i < n; i = i + 9)
 			{
-				if (board[i / 10][i % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c / 10 + 1) * 10 + (c % 10 - 1); //moves diagonally on the chess board
 			}
 			return true;
 		}
-		else if(n < c && ((c - n) % 9 == 0)) //if we are going diagonal up to the right
+		else if (n < c) //if we are going diagonal up to the right
 		{
-			for (int i = c; i > n; i--)
+			for (int i = c - 9; i > n; i = i - 9)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c / 10 - 1) * 10 + (c % 10 + 1); //moves diagonally on the chess board
 			}
 			return true;
 		}
-		else if(n < c && ((c - n) % 11 == 0)) //if we are going diagonal down to the right
+	}
+
+	else if ((c - n) % 11 == 0)
+	{
+		if (n > c) //if we are going diagonal down to the right
 		{
-			for (int i = c; i < n; i++)
+			for (int i = c + 11; i < n; i = i + 11)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c / 10 + 1) * 10 + (c % 10 + 1); //moves diagonally on the chess board
 			}
 			return true;
 		}
-		else if(n < c && ((c - n) % 11 == 0)) //if we are going diagonal up to the left
+		else if (n < c) //if we are going diagonal up to the left
 		{
-			for (int i = c; i > n; i--)
+			for (int i = c - 11; i > n; i = i - 11)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c / 10 - 1) * 10 + (c % 10 - 1); //moves diagonally on the chess board
 			}
 			return true;
 		}
@@ -348,122 +343,108 @@ Queen::Queen(bool isWhite)
 	A queen can move in diagonal, horizontal, and vertical
 */
 
+// QUEEN IS FINISHED
+
 bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
 {
 	int c = convert(curPos);
 	int n = convert(newPos);
 	
-	if(isWhite)
-	{
-		if (board[n / 10][n % 10]->getType().at(0) == 'W')
-		{
-			return false;
-		}
-	}
-	else
-	{
-		if (board[n / 10][n % 10]->getType().at(0) == 'B')
-		{
-			return false;
-		}
-	}
-	if(n /10 >= 8 || n % 10 >= 8 || n / 10 <= 0 || n % 10 <= 0)
-	{
+	// Check to see if new spot is obs
+
+	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
-	}
-	if(((c - n) % 9 == 0) || ((c - n) % 11 == 0))
+
+	// Check to make sure new spot is not teammate
+
+	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
+		return false;
+	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
+		return false;
+
+	if ( (c - n) % 9 == 0)
 	{
-		if(n > c && ((c - n) % 9 == 0)) //if we are going diagonal down to the left
+		if (n > c) //if we are going diagonal down to the left
 		{
-			for (int i = c; i < n; i++)
+			for (int i = c + 9; i < n; i = i + 9)
 			{
-				if (board[i / 10][i % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c / 10 + 1) * 10 + (c % 10 - 1); //moves diagonally on the chess board
 			}
 			return true;
 		}
-		else if(n < c && ((c - n) % 9 == 0)) //if we are going diagonal up to the right
+		else if (n < c) //if we are going diagonal up to the right
 		{
-			for (int i = c; i > n; i--)
+			for (int i = c - 9; i > n; i = i - 9)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c / 10 - 1) * 10 + (c % 10 + 1); //moves diagonally on the chess board
-			}
-			return true;
-		}
-		else if(n < c && ((c - n) % 11 == 0)) //if we are going diagonal down to the right
-		{
-			for (int i = c; i < n; i++)
-			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
-					return false;
-				
-				c = (c / 10 + 1) * 10 + (c % 10 + 1); //moves diagonally on the chess board
-			}
-			return true;
-		}
-		else if(n < c && ((c - n) % 11 == 0)) //if we are going diagonal up to the left
-		{
-			for (int i = c; i > n; i--)
-			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
-					return false;
-				
-				c = (c / 10 - 1) * 10 + (c % 10 - 1); //moves diagonally on the chess board
 			}
 			return true;
 		}
 	}
-	else if(c / 10 == n / 10) //if the queen is moving in the vertical direction
+
+	else if ( (c - n) % 11 == 0)
 	{
-		if(n < c) //going vertically up
+		if (n > c) //if we are going diagonal down to the right
 		{
-			for (int i = c; i < n; i++)
+			for (int i = c + 11; i < n; i = i + 11)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c - 10); //moves vertically on the chess board
 			}
 			return true;
 		}
-		else if(n > c) //going vertically down
+		else if (n < c) //if we are going diagonal up to the left
 		{
-			for (int i = c; i > n; i--)
+			for (int i = c - 11; i > n; i = i - 11)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[i / 10][i % 10]->getType() != "--")
 					return false;
-				
-				c = (c + 10); //moves vertically on the chess board
 			}
 			return true;
 		}
-	}	
-	else if(c % 10 == n % 10) //if the queen is moving horizontally
+	}
+
+	else if (c / 10 == n / 10)
 	{
-		if(n < c) //horizontally left
+		if (c > n)
 		{
-			for (int i = c; i < n; i++)
+			for (int i = c % 10 - 1; i > n % 10; i--)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[c / 10][i]->getType() != "--")
 					return false;
-				
-				c = (c - 1); //moves horizontally
 			}
 			return true;
 		}
-		else if(n > c) //horizontally right
+		else if (c < n)
 		{
-			for (int i = c; i > n; i--)
+			for (int i = c % 10 + 1; i < n % 10; i++)
 			{
-				if (board[i / 10][c % 10]->getType() != "--" && !(i / 10 == n / 10 && i % 10 == n % 10))
+				if (board[c / 10][i]->getType() != "--")
 					return false;
-				
-				c = (c + 1); //moves horizontally
+			}
+			return true;
+		}
+	}
+
+	else if (c % 10 == n % 10)
+	{
+		if (c > n)
+		{
+			for (int i = c / 10 - 1; i > n / 10; i--)
+			{
+				if (board[i][c % 10]->getType() != "--")
+					return false;
+			}
+			return true;
+		}
+		else if (n < c)
+		{
+			for (int i = c / 10 + 1; i < n / 10; i++)
+			{
+				if (board[i][c % 10]->getType() != "--")
+					return false;
 			}
 			return true;
 		}

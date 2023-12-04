@@ -44,6 +44,7 @@ void Game::create()
 				break;
 
 			// Creating Black Pawns at 2nd to top of board
+				/*
 			case 1:
 				for (int x = 0; x < 8; x++)
 				{
@@ -51,14 +52,18 @@ void Game::create()
 					board[i][x] = new Pawn(false);
 				}
 				break;
+				*/
 
 			// Creating White Pawns at 2nd to bottom of board
+				/*
 			case 6:
-				for (int x = 1; x < 8; x++)
+				for (int x = 0; x < 8; x++)
 				{
 					board[i][x] = new Pawn(true);
 				}
 				break; 
+
+				*/
 
 			// Creating White Special Pieces at bottom of board
 			case 7:
@@ -81,7 +86,7 @@ void Game::create()
 				break;
 		}
 	}
-	board[6][0] = new Null();
+	//board[6][3] = new Null();
 }
 
 /*
@@ -101,16 +106,16 @@ void Game::create()
 
 bool Game::makeMove()
 {
-	cout << *board[6][3] << endl;
-	bool canMakeMove = board[6][3]->move("D7", "D5", false, board);
+	cout << *board[1][2] << endl;
+	bool canMakeMove = board[1][2]->move("C2", "C4", false, board);
 	if (canMakeMove)
 	{
-		int newPos = convertPos("D5");
-		int oldPos = convertPos("D7");
+		int newPos = convertPos("C4");
+		int oldPos = convertPos("C2");
 
 		Piece* temp = board[oldPos / 10][oldPos % 10];
 
-		board[6][3] = new Null();
+		board[oldPos / 10][oldPos % 10] = new Null();
 		board[newPos / 10][newPos % 10] = temp;
 
 	}
@@ -125,16 +130,16 @@ bool Game::makeMove()
 
 bool Game::makeMove()
 {
-	cout << *board[7][1] << endl;
-	bool canMakeMove = board[7][1]->move("B8", "D7", false, board);
+	cout << *board[0][1] << endl;
+	bool canMakeMove = board[0][1]->move("B1", "C3", false, board);
 	if (canMakeMove)
 	{
-		int newPos = convertPos("D7");
-		int oldPos = convertPos("B8");
+		int newPos = convertPos("C3");
+		int oldPos = convertPos("B1");
 
 		Piece* temp = board[oldPos / 10][oldPos % 10];
 
-		board[7][1] = new Null();
+		board[oldPos / 10][oldPos % 10] = new Null();
 		board[newPos / 10][newPos % 10] = temp;
 
 	}
@@ -149,16 +154,60 @@ bool Game::makeMove()
 
 bool Game::makeMove()
 {
-	cout << *board[7][0] << endl;
-	bool canMakeMove = board[7][0]->move("A8", "A2", false, board);
+	cout << *board[0][0] << endl;
+	bool canMakeMove = board[0][0]->move("A1", "A7", false, board);
 	if (canMakeMove)
 	{
-		int newPos = convertPos("A2");
-		int oldPos = convertPos("A8");
+		int newPos = convertPos("A7");
+		int oldPos = convertPos("A1");
 
 		Piece* temp = board[oldPos / 10][oldPos % 10];
 
-		board[7][0] = new Null();
+		board[oldPos / 10][oldPos % 10] = new Null();
+		board[newPos / 10][newPos % 10] = temp;
+
+	}
+	return canMakeMove;
+}
+
+*/
+
+// QUEEN TEST CASE
+
+bool Game::makeMove()
+{
+	cout << *board[7][3] << endl;
+	bool canMakeMove = board[7][3]->move("D8", "A8", false, board);
+	if (canMakeMove)
+	{
+		int newPos = convertPos("A8");
+		int oldPos = convertPos("D8");
+
+		Piece* temp = board[oldPos / 10][oldPos % 10];
+
+		board[oldPos / 10][oldPos % 10] = new Null();
+		board[newPos / 10][newPos % 10] = temp;
+
+	}
+	return canMakeMove;
+}
+
+// BISHOP TEST CASE
+
+/*
+
+bool Game::makeMove()
+{
+	cout << *board[0][2] << endl;
+	bool canMakeMove = board[0][2]->move("C1", "E3", false, board);
+	if (canMakeMove)
+	{
+		int newPos = convertPos("E3");
+		int oldPos = convertPos("C1");
+
+		Piece* temp = board[oldPos / 10][oldPos % 10];
+
+		board[oldPos / 10][oldPos % 10] = new Null();
 		board[newPos / 10][newPos % 10] = temp;
 
 	}

@@ -545,7 +545,7 @@ bool King::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 			return true;
 	}
 
-	else if ((c / 10 == n / 10) && ((c - n == 10) || (c - n == -10))) //moving vertically
+	else if ((c / 10 == n / 10) && ((c - n == 1) || (c - n == -1))) //moving vertically
 	{
 		if (board[n / 10][n % 10]->getType() != "--")
 			return false;
@@ -553,7 +553,7 @@ bool King::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 			return true;
 	}
 
-	else if ((c % 10 == n % 10) && ((c - n == 1) || (c - n == -1))) // moving horizontally
+	else if ((c % 10 == n % 10) && ((c - n == 10) || (c - n == -10))) // moving horizontally
 	{
 		if (board[n / 10][n % 10]->getType() != "--")
 			return false;

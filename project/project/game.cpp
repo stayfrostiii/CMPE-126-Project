@@ -117,7 +117,14 @@ bool::Game::makeMove(string curPos, string newPos)
 
 		board[c / 10][c % 10] = new Null();
 		board[n / 10][n % 10] = temp;
-
+		if(((board[n / 10][n % 10]->getType().at(0) == 'B') && (board[n / 10][n % 10]->getType().at(1) == 'P')) && ((n / 10) == 7))
+		{
+			board[n / 10][n % 10] = new Queen(false);
+		}
+		else if(((board[n / 10][n % 10]->getType().at(0) == 'W') && (board[n / 10][n % 10]->getType().at(1) == 'P')) && ((n / 10) == 0))
+		{
+			board[n / 10][n % 10] = new Queen(true);
+		}
 		if (gameOver)
 		{
 			endGW(players.front(), players.back());

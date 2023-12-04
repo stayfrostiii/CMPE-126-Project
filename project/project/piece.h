@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/*
+	Piece class is the parent class of every piece on the board
+*/
+
 class Piece
 {
 	protected:

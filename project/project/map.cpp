@@ -5,16 +5,29 @@
 
 using namespace std;
 
+/*
+	Node(...) simple constructor
+*/
+
 Node::Node(string value, Node* next)
 {
 	this->value = value;
 	this->next = next;
 }
 
+/*
+	hash(...) returns int that functions as key for hash map. The function is declared as
+	private in MapSC class because it is only needed locally
+*/
+
 int MapSC::hash(double a)
 {
 	return (int)(a * 100);
 }
+
+/*
+	MapSC() initiializes the size 101 array to be empty;
+*/
 
 MapSC::MapSC()
 {
@@ -23,6 +36,10 @@ MapSC::MapSC()
 		arr[i] = new Node("", nullptr);
 	}
 }
+
+/*
+	add(...) adds a string to the hash map using the hash function
+*/
 
 void MapSC::add(string line)
 {
@@ -42,6 +59,10 @@ void MapSC::add(string line)
 		tempPtr->next = new Node(line, nullptr);
 	}
 }
+
+/*
+	print(...) prints the linked list with the corresponding key
+*/
 
 void MapSC::print(double wlr)
 {

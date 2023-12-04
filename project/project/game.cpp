@@ -9,6 +9,11 @@
 
 using namespace std;
 
+/*
+	convertPos(...) converts the given position into an int that can be used as an index
+	in the 2d array board
+*/
+
 int convertPos(string pos)
 {
 	return (pos.at(1) - '0') * 10 + (pos.at(0) - 64) - 11;
@@ -25,6 +30,10 @@ Game::Game(Player& p1, Player& p2)
 	gameOver = false;
 	create();
 }
+
+/*
+	create() creates the initial board with each piece in their respective location
+*/
 
 void Game::create()
 {
@@ -84,14 +93,13 @@ void Game::create()
 }
 
 /*
-	makeMove() moves pieces across the board and will determine whether game is over or not.
-	The order of operations:
-	1) Ask user for move. I.e. A4 to A8
-	2) Check to see if move is valid (using move function of piece on A4)
-		- If A8 reports a piece back, then isKilling is true
-		- Else, isKilling is false
-	3) Move is made, returns if both king is alive on both sides
-
+	makeMove() moves pieces across the board. The function will return a boolean that determines whether
+	the move is valid or not. The order of operations are:
+		1) Convert string positions into int positions
+		2) Determine that player isnt moving opposing pieces (if so, return false)
+		3) Determine if move can be made (if not, return false)
+		4) Move piece, check win condition (new position is opposing king = win)
+		5) If win, increment winner, decrement loser, and exit program
 */
 
 bool::Game::makeMove(string curPos, string newPos)
@@ -104,19 +112,19 @@ bool::Game::makeMove(string curPos, string newPos)
 	else if (!players.front().getTeam() && board[c / 10][c % 10]->getType().at(0) == 'W')
 		return false;
 
-	cout << board[c / 10][c % 10]->getType() << " moving from " << curPos << " -> " << newPos << endl;
-
 	bool canMakeMove = board[c / 10][c % 10]->move(curPos, newPos, board);
 	bool gameOver;
 
 	if (canMakeMove)
 	{
+		cout << board[c / 10][c % 10]->getType() << " moving from " << curPos << " -> " << newPos << endl;
 		gameOver = board[n / 10][n % 10]->getType().at(1) == 'K';
 		
 		Piece* temp = board[c / 10][c % 10];
 
 		board[c / 10][c % 10] = new Null();
 		board[n / 10][n % 10] = temp;
+
 		if(((board[n / 10][n % 10]->getType().at(0) == 'B') && (board[n / 10][n % 10]->getType().at(1) == 'P')) && ((n / 10) == 7))
 		{
 			board[n / 10][n % 10] = new Queen(false);
@@ -125,6 +133,7 @@ bool::Game::makeMove(string curPos, string newPos)
 		{
 			board[n / 10][n % 10] = new Queen(true);
 		}
+
 		if (gameOver)
 		{
 			endGW(players.front(), players.back());
@@ -148,10 +157,10 @@ void Game::redo()
 }
 
 /*
-	takeTurn() is the main function of the game class.
-	1) Asks user what to do
-		- Redo turn
-		- Make Move
+	takeTurn() allows for player to take their turn. Order of operations:
+		1) Ask player for current position and new position (use graphic to determine positions)
+		2) If move is valid, loop is closed
+		3) Prints current board after turn is done
 */
 
 void Game::takeTurn()
@@ -180,6 +189,12 @@ void Game::takeTurn()
 	print();
 }
 
+/*
+	run() is the main function of the game class. This function will loop infinitely through until:
+		1) Termination of program when game is won
+		2) Player resigns (NOT IMPLEMENTED YET)
+*/
+
 void Game::run()
 {
 	bool isWhite = true;
@@ -197,6 +212,11 @@ void Game::run()
 		isWhite = !isWhite;
 	}
 }
+
+/*
+	addRecord(...) adds the information of a player to the names.txt file. Special cases are accounted
+	for when a player already exists in the names.txt file
+*/
 
 void Game::addRecord(Player& p)
 {
@@ -236,6 +256,10 @@ void Game::addRecord(Player& p)
 
 	ofile.close();
 }
+
+/*
+	endGW(...) increments winner and decrements loser
+*/
 
 void Game::endGW(Player& winner, Player& loser)
 {

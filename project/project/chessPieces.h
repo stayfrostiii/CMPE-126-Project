@@ -2,16 +2,16 @@
 #ifndef Chess_Pieces_Class
 #define Chess_Pieces_Class
 
-/*
-	This header file will be used to declare each of the chess pieces in their own classes. This allows
-	each piece to have their own move function as well as being able to be added to any array of type Piece
-*/
-
 #include "piece.h"
 #include <iostream>
 #include <string>
 
 using namespace std;
+
+/*
+	This header file will be used to declare each of the chess pieces in their own classes. This allows
+	each piece to have their own move function as well as being able to be added to any array of type Piece
+*/
 
 class Null : public Piece
 {

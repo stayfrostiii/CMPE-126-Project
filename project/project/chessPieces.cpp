@@ -75,8 +75,53 @@ bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 	int c = convert(curPos);
 	int n = convert(newPos);
 
-	if (c % 10 != n % 10 || c / 10 == n / 10)
+	// Check to see if new spot is obs
+
+	if (n / 10 > 7 || n / 10 < 0 || n % 10 > 7 || n % 10 < 0)
 		return false;
+
+	// Check to make sure new spot is not teammate
+
+	if (isWhite && board[n / 10][n % 10]->getType().at(0) == 'W')
+		return false;
+	else if (!isWhite && board[n / 10][n % 10]->getType().at(0) == 'B')
+		return false;
+
+	if (isWhite)
+	{
+		if ( (c - n == 11 || c - n == 9) && board[n / 10][n % 10]->getType().at(0) == 'B')
+		{
+			return true;
+		}
+		else if (c / 10 == 6 && n / 10 == 4)
+		{
+			return board[5][c % 10]->getType() == "--";
+		}
+		else if (c - n == 10)
+			return true;
+	}
+	else
+	{
+		if ((c - n == -11 || c - n == -9) && board[n / 10][n % 10]->getType().at(0) == 'W')
+		{
+			return true;
+		}
+		else if (c / 10 == 1 && n / 10 == 3)
+		{
+			return board[2][c % 10]->getType() == "--";
+		}
+		else if (c - n == -10)
+			return true;
+	}
+
+	return false;
+
+
+
+
+
+
+	/*
 
 	if (isWhite)
 	{
@@ -113,7 +158,7 @@ bool Pawn::move(string curPos, string newPos, bool isKilling, Piece* board[8][8]
 		}
 	}
 
-	return false;
+	return false; */
 }
 
 // Rook class
@@ -430,7 +475,7 @@ bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8
 
 	else if (c % 10 == n % 10)
 	{
-		if (c > n)
+		if (n > c)
 		{
 			for (int i = c / 10 - 1; i > n / 10; i--)
 			{
@@ -439,7 +484,7 @@ bool Queen::move(string curPos, string newPos, bool isKilling, Piece* board[8][8
 			}
 			return true;
 		}
-		else if (n < c)
+		else if (c < n)
 		{
 			for (int i = c / 10 + 1; i < n / 10; i++)
 			{

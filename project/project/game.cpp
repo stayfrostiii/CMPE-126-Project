@@ -173,7 +173,7 @@ void Game::takeTurn(Player& p)
 
 	} while (!done);
 
-
+	cout << endl;
 	print();
 }
 
@@ -182,6 +182,7 @@ void Game::run()
 	bool isWhite = true;
 	while (true)
 	{
+		cout << endl;
 		cout << players.front().getName() << "'s turn";
 		if (isWhite)
 			cout << " (W)..." << endl;
@@ -198,7 +199,7 @@ void Game::endGW(Player& p)
 {
 	++p;
 	print();
-	cout << p.getName() << " has won the game";
+	cout << p.getName() << " has won the game" << endl;
 }
 
 /*

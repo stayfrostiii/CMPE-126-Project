@@ -17,49 +17,49 @@ class Null : public Piece
 {
 	public:
 		Null();
-		bool move(string, string, bool, Piece* [8][8]);
+		bool move(string, string, Piece* [8][8]);
 };
 
 class Pawn : public Piece
 {
 	public:
 		Pawn(bool);
-		bool move(string, string, bool, Piece* [8][8]);
+		bool move(string, string, Piece* [8][8]);
 };
 
 class Rook : public Piece
 {
 	public:
 		Rook(bool);
-		bool move(string, string, bool, Piece*[8][8]);
+		bool move(string, string, Piece*[8][8]);
 };
 
 class Knight : public Piece
 {
 	public:
 		Knight(bool);
-		bool move(string, string, bool, Piece* [8][8]);
+		bool move(string, string, Piece* [8][8]);
 };
 
 class Bishop : public Piece
 {
 	public:
 		Bishop(bool);
-		bool move(string, string, bool, Piece* [8][8]);
+		bool move(string, string, Piece* [8][8]);
 };
 
 class Queen : public Piece
 {
 	public:
 		Queen(bool);
-		bool move(string, string, bool, Piece* [8][8]);
+		bool move(string, string, Piece* [8][8]);
 };
 
 class King : public Piece
 {
 	public:
 		King(bool);
-		bool move(string, string, bool, Piece* [8][8]);
+		bool move(string, string, Piece* [8][8]);
 };
 
 #endif

@@ -1,6 +1,9 @@
 
 #include <iostream>
 #include <queue>
+#include <fstream>
+#include <vector>
+#include <string>
 
 #include "game.h"
 
@@ -91,19 +94,19 @@ void Game::create()
 
 */
 
-bool::Game::makeMove(string curPos, string newPos, Player& p)
+bool::Game::makeMove(string curPos, string newPos)
 {
 	int c = convertPos(curPos);
 	int n = convertPos(newPos);
 
-	if (p.getTeam() && board[c / 10][c % 10]->getType().at(0) == 'B')
+	if (players.front().getTeam() && board[c / 10][c % 10]->getType().at(0) == 'B')
 		return false;
-	else if (!p.getTeam() && board[c / 10][c % 10]->getType().at(0) == 'W')
+	else if (!players.front().getTeam() && board[c / 10][c % 10]->getType().at(0) == 'W')
 		return false;
 
 	cout << board[c / 10][c % 10]->getType() << " moving from " << curPos << " -> " << newPos << endl;
 
-	bool canMakeMove = board[c / 10][c % 10]->move(curPos, newPos, false, board);
+	bool canMakeMove = board[c / 10][c % 10]->move(curPos, newPos, board);
 	bool gameOver;
 
 	if (canMakeMove)
@@ -117,7 +120,7 @@ bool::Game::makeMove(string curPos, string newPos, Player& p)
 
 		if (gameOver)
 		{
-			endGW(p);
+			endGW(players.front(), players.back());
 			exit(0);
 		}
 
@@ -144,7 +147,7 @@ void Game::redo()
 		- Make Move
 */
 
-void Game::takeTurn(Player& p)
+void Game::takeTurn()
 {
 	string curPos;
 	string newPos;
@@ -158,7 +161,7 @@ void Game::takeTurn(Player& p)
 		cout << "New Position: ";
 		cin >> newPos;
 
-		done = makeMove(curPos, newPos, p);
+		done = makeMove(curPos, newPos);
 		if (!done)
 		{
 			cout << "invalid move" << endl;
@@ -181,18 +184,61 @@ void Game::run()
 			cout << " (W)..." << endl;
 		else
 			cout << " (B)..." << endl;
-		takeTurn(players.front());
+		takeTurn();
 		players.push(players.front());
 		players.pop();
 		isWhite = !isWhite;
 	}
 }
 
-void Game::endGW(Player& p)
+void Game::addRecord(Player& p)
 {
-	++p;
+	vector<string> lines;
+	string line;
+	string temp;
+
+	ifstream ifile("names.txt");
+	if (ifile.is_open())
+	{
+		while (getline(ifile, line))
+		{
+			temp = "";
+			for (int i = 0; i < line.size(); i++)
+			{
+				if (line.at(i) == ' ')
+					i = line.size();
+				else
+					temp += line.at(i);
+			}
+			if (temp != p.getName())
+			{
+				lines.push_back(line);
+			}
+		}
+		ifile.close();
+	}
+	lines.push_back(p.getInfo());
+
+	ofstream ofile;
+	ofile.open("names.txt");
+
+	for (int i = 0; i < lines.size(); i++)
+	{
+		ofile << lines.at(i) << endl;
+	}
+
+	ofile.close();
+}
+
+void Game::endGW(Player& winner, Player& loser)
+{
+	++winner;
+	--loser;
 	print();
-	cout << p.getName() << " has won the game" << endl;
+	cout << winner.getName() << " has won the game" << endl;
+
+	addRecord(winner);
+	addRecord(loser);
 }
 
 /*

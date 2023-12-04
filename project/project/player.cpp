@@ -6,20 +6,41 @@
 
 using namespace std;
 
-Player::Player(string name)
+Player::Player(string line)
 {
-	this->name = name;
+	
+	int part = 0;
 	wins = 0;
 	losses = 0;
-	wlr = 0;
-}
 
-Player::Player(string name, int wins, int losses, double wlr)
-{
-	this->name = name;
-	this->wins = wins;
-	this->losses = losses;
-	this->wlr = wlr;
+	for (int i = 0; i < line.size(); i++)
+	{
+		switch (part)
+		{
+			case 0:
+				if (line.at(i) == ' ')
+					++part;
+				else
+					name += line.at(i);
+				break;
+
+			case 1:
+				if (line.at(i) == ' ')
+					++part;
+				else
+					wins = wins * 10 + line.at(i) - '0';
+				break;
+
+			case 2:
+				if (line.at(i) == ' ')
+					++part;
+				else
+					losses = losses * 10 + line.at(i) - '0';
+				break;
+		}
+	}
+	
+	wlr = (double)wins / (double)(wins + losses);
 }
 
 string Player::getInfo()
@@ -40,6 +61,20 @@ bool Player::getTeam()
 string Player::getName()
 {
 	return name;
+}
+
+double Player::getWLR()
+{
+	return wlr;
+}
+
+ostream& operator<<(ostream& os, Player& player)
+{
+	os << "Name: " << player.name << endl
+		<< "Wins: " << player.wins << endl
+		<< "Losses: " << player.losses << endl
+		<< "Win/Loss Ratio: " << player.wlr << endl;
+	return os;
 }
 
 Player& Player::operator++()

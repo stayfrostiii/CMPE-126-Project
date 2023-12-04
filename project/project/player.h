@@ -16,11 +16,13 @@ private:
 	bool isWhite;
 public:
 	Player(string);
-	Player(string, int, int, double);
 	string getInfo();
 	void setTeam(bool);
 	bool getTeam();
 	string getName();
+	double getWLR();
+	friend ostream& operator<<(ostream&, Player&);
+	void print();
 	Player& operator++();
 	Player& operator--();
 };

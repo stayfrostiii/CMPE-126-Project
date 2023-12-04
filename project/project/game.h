@@ -26,11 +26,12 @@ private:
 public:
 	Game(Player&, Player&);
 	void create();
-	bool makeMove(string, string, Player&);
+	bool makeMove(string, string);
 	void redo();
-	void takeTurn(Player&);
+	void takeTurn();
 	void run();
-	void endGW(Player&);
+	void addRecord(Player&);
+	void endGW(Player&, Player&);
 	void print();
 };
 

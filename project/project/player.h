@@ -20,6 +20,7 @@ public:
 	string getInfo();
 	void setTeam(bool);
 	bool getTeam();
+	string getName();
 	Player& operator++();
 	Player& operator--();
 };

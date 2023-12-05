@@ -1,5 +1,5 @@
 Jeremy 5 5 0.5
 Daniel 0 10 0
 Bobby 10 10 0.5
-Josh 11 0 1.000000
-Calvin 1 10 0.090909
+Josh 12 0 1.000000
+Calvin 0 1 0.000000

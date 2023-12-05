@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/*
+	Player class allows for the storing of information
+*/
+
 class Player
 {
 private:

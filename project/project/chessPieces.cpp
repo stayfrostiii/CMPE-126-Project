@@ -12,11 +12,6 @@ Null::Null()
 	this->pieceType = "--";
 }
 
-//bool Piece::move(string curPos, string newPos, bool isKilling, Piece* board[8][8])
-//{
-//	return false;
-//}
-
 string Piece::getType()
 {
 	return pieceType;

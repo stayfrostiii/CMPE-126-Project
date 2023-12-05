@@ -11,6 +11,10 @@
 
 using namespace std;
 
+/*
+	findPlayer(...) returns the line of the given player name from the names.txt document.
+*/
+
 string findPlayer(string name)
 {
 	string results = "";
@@ -40,6 +44,12 @@ string findPlayer(string name)
 
 	return results;
 }
+
+/*
+	startGame() function declares a game class and two player classes. If a user-inputted player name is 
+	already in the names.txt document, then the information from the document is used. If not, then a new
+	player with default information is created.
+*/
 
 void startGame()
 {
@@ -81,6 +91,10 @@ void startGame()
 	game.run();
 }
 
+/*
+	printAllPlayers() prints information of all players in names.txt
+*/
+
 void printAllPlayers()
 {
 	cout << "Printing all players from least to most recently played: " << endl << endl;
@@ -98,6 +112,10 @@ void printAllPlayers()
 		ifile.close();
 	}
 }
+
+/*
+	lookUpStat() prints the information of the user-inputted player name
+*/
 
 void lookUpStat()
 {
@@ -118,6 +136,10 @@ void lookUpStat()
 		cout << player;
 	}
 }
+
+/*
+	wlrLookUp() prints players from names.txt based on their W/L Ratio
+*/
 
 void wlrLookUp()
 {

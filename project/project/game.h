@@ -10,6 +10,11 @@
 #include "player.h"
 #include "chessPieces.h"
 
+/*
+	Game class functions as the board that will be played on. All actions that are made 
+	duringg the game will be through here as well
+*/
+
 class Game
 {
 private:

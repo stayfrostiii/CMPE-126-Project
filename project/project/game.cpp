@@ -4,6 +4,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <stack>
+#include <array>
 
 #include "game.h"
 
@@ -117,6 +119,8 @@ bool::Game::makeMove(string curPos, string newPos)
 
 		board[c / 10][c % 10] = new Null();
 		board[n / 10][n % 10] = temp;
+
+
 		if(((board[n / 10][n % 10]->getType().at(0) == 'B') && (board[n / 10][n % 10]->getType().at(1) == 'P')) && ((n / 10) == 7))
 		{
 			board[n / 10][n % 10] = new Queen(false);
@@ -135,16 +139,30 @@ bool::Game::makeMove(string curPos, string newPos)
 	return canMakeMove;
 }
 
-void Game::redo()
-{
-	for (int i = 0; i < 8; i++)
-	{
-		for (int x = 0; x < 8; x++)
-		{
-			board[i][x] = prevTurns.top()[i][x];
-		}
+void Game::undo() {
+	if (!currentPosition.empty()) {
+
+		string curPos = currentPosition.top(); 
+		string newPos = newPosition.top();
+		
+		int c = convertPos(curPos);
+		int n = convertPos(newPos);
+
+		board[c / 10][c % 10] = movingPiece.top();
+		board[n / 10][n % 10] = stillPiece.top();
+
+		newPosition.pop();	
+		currentPosition.pop();
+		movingPiece.pop(); 
+		stillPiece.pop();
+
+		print(); 
+		
+		cout << "Undo successful." << endl;
 	}
-	prevTurns.pop();
+	else {
+		cout << "Cannot undo further." << endl;
+	}
 }
 
 /*
@@ -156,26 +174,46 @@ void Game::redo()
 
 void Game::takeTurn()
 {
-	string curPos;
-	string newPos;
+	string curPos, newPos;
+	int c, n, choice;
+
 	bool done = false;
-	//prevTurns.push(board);
+	
+	cout << "Do you want to undo your move(1) or continue(2)?" << endl;
+	cin >> choice; 
 
-	do
-	{
-		cout << "Current Position: ";
-		cin >> curPos;
-		cout << "New Position: ";
-		cin >> newPos;
-
-		done = makeMove(curPos, newPos);
-		if (!done)
+	if (choice == 2) {
+		do
 		{
-			cout << "invalid move" << endl;
-		}
+			cout << "Current Position: ";
+			cin >> curPos;
+			cout << "New Position: ";
+			cin >> newPos;
 
-	} while (!done);
+			c = convertPos(curPos);
+			n = convertPos(newPos);
 
+			newPosition.push(newPos);
+			currentPosition.push(curPos);
+			movingPiece.push(board[c / 10][c % 10]);
+			stillPiece.push(board[n / 10][n % 10]);
+
+			done = makeMove(curPos, newPos);
+			if (!done)
+			{
+				cout << "invalid move" << endl;
+
+				newPosition.pop();		//for undo function if move is invalid
+				currentPosition.pop();
+				movingPiece.pop();
+				stillPiece.pop();
+			}
+
+		} while (!done);
+	}
+	else {
+		undo();
+	}
 	cout << endl;
 	print();
 }
@@ -210,7 +248,7 @@ void Game::addRecord(Player& p)
 		while (getline(ifile, line))
 		{
 			temp = "";
-			for (int i = 0; i < line.size(); i++)
+			for (size_t i = 0; i < line.size(); i++)
 			{
 				if (line.at(i) == ' ')
 					i = line.size();

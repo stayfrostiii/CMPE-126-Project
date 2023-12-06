@@ -1,8 +1,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <map>
 #include <stack>
 
 #include "player.h"

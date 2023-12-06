@@ -181,14 +181,24 @@ void Game::undo() {
 void Game::takeTurn()
 {
 	string curPos, newPos;
-	int c, n, choice;
+	int c, n;
 
 	bool done = false;
-	
-	cout << "Do you want to undo your move(1) or continue(2)?" << endl;
-	cin >> choice; 
 
-	if (choice == 2) {
+	string choice;
+	char es;
+	
+	while (!done)
+	{
+		cout << "Do you want to undo (0) or move (1)?" << endl;
+		cin >> choice;
+		if (choice == "0" || choice == "1")
+			done = true;
+		else
+			cout << "Invalid input" << endl;
+	} 
+
+	if (choice == "1") {
 		do
 		{
 			cout << "Current Position: ";

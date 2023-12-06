@@ -144,7 +144,7 @@ void lookUpStat()
 void wlrLookUp()
 {
 	double wlr;
-	cout << "Enter W/L Ratio to look up (up to 2 decimal places): ";
+	cout << "Enter W/L Ratio to look up (from 0.0 -> 1.0): ";
 	cin >> wlr;
 	cout << endl;
 

@@ -66,6 +66,11 @@ void MapSC::add(string line)
 
 void MapSC::print(double wlr)
 {
+	if (wlr > 1 || wlr < 0)
+	{
+		cout << "Invalid W/L Ratio (Must be 0.0 -> 1.0)" << endl;
+		return;
+	}
 	int temp = hash(wlr);
 	if (arr[temp]->value == "")
 		cout << "No players have this W/L Ratio" << endl;

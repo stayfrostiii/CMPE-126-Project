@@ -1,4 +1,4 @@
-# CMPE 126 Project
+# CChess
 ## About
 The objective of this project is to create a chess board with the following restrictions:
 - Classes that demonstrate inheritance and polymorphism
